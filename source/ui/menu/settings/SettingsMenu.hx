@@ -4,7 +4,6 @@ import controls.PlayerSettings;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxSubState;
 import flixel.addons.ui.FlxSlider;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
@@ -18,6 +17,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.util.FlxSignal;
+import play.PauseSubState;
 
 import graphics.GameCamera;
 
@@ -29,13 +29,17 @@ import util.FileUtil;
 import util.GradientUtil;
 import util.TweenUtil;
 
+#if mobileC
+import mobile.MobileControlsSubState;
+#end
+
 enum SelectState
 {
 	SelectingCategory;
 	SelectingOption;
 }
 
-class SettingsMenu extends FlxSubState
+class SettingsMenu extends MusicBeatSubstate
 {
 	static var curCategorySelection:Int = 0;
 	
@@ -127,6 +131,11 @@ class SettingsMenu extends FlxSubState
 		camera.bgColor.alpha = 0;
 
 		FlxG.cameras.add(camera, false);
+
+		#if mobileC
+		addVirtualPad(LEFT_FULL, A_B_C);
+		addVirtualPadCamera();
+		#end
 	}
 
 	public function init()
@@ -187,6 +196,10 @@ class SettingsMenu extends FlxSubState
 		var downP = PlayerSettings.controls.DOWN_P;
 		var upP = PlayerSettings.controls.UP_P;
 		var back = PlayerSettings.controls.BACK;
+
+		#if mobileC
+		var mobileControls = virtualPad.buttonC.justPressed;
+		#end
 
 		switch (curState)
 		{
@@ -250,7 +263,14 @@ class SettingsMenu extends FlxSubState
 				}
 		}
 
-		if (back)
+		#if mobileC
+		if (mobileControls)
+		{
+			FlxG.switchState(() -> new MobileControlsSubState());
+		}
+		#end
+
+		if (back #if mobileC || FlxG.android.justReleased.BACK #end)
 		{
 			closeClipboard();
 		}
@@ -286,22 +306,36 @@ class SettingsMenu extends FlxSubState
 	public function closeClipboard()
 	{
 		canInteract = false;
+		var self = this;
 		
 		var sineOutStep:EaseFunction = TweenUtil.easeSteps(20, FlxEase.sineOut);
 
 		new FlxTimer().start(0.5, function(timer:FlxTimer)
 		{
-			FlxTween.tween(clipboard, {y: clipboard.height}, 0.5, {
+			FlxTween.tween(self.clipboard, {y: self.clipboard.height}, 0.5, {
 				ease: sineOutStep,
 				onComplete: function(t:FlxTween)
 				{
 					new FlxTimer().start(0.2, function(timer:FlxTimer)
 					{
-						FlxTween.tween(bg, {alpha: 0}, 0.5, {
+						FlxTween.tween(self.bg, {alpha: 0}, 0.5, {
 							ease: sineOutStep,
 							onComplete: function(t:FlxTween)
 							{
-								close();
+								#if mobileC
+								if (self._parentState != null && Std.isOfType(self._parentState, PauseSubState))
+								{
+    								var pause = cast(self._parentState, PauseSubState);
+    								pause.addVirtualPad(UP_DOWN, A);
+									pause.addVirtualPadCamera();
+								}
+								if (self._parentState != null && Std.isOfType(self._parentState, MainMenuState))
+								{
+    								var main = cast(self._parentState, MainMenuState);
+    								main.addVirtualPad(LEFT_RIGHT, A_B);
+								}
+								#end
+								self.close();
 							}
 						});
 					});

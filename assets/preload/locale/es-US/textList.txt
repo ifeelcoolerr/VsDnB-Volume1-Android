@@ -4,9 +4,11 @@ es-US==Español
 pt-br==Portugués Brasil 
 
 intro_warning==¡ADVERTENCIA!:linebreak:Este mod contiene shaders y efectos que pueden causar ataque epilépticos, mareos o cualquier discapacidad similar. :linebreak::linebreak:Asegúrese  de ir al menú de opciones (localizado en el menú principal y el menú de pausa) para acceder a las opciones. :linebreak::linebreak:El idioma está disponible en las mismas opciones.:linebreak::linebreak:(Presiona ENTER para continuar.) 
+intro_warning_mobile==¡ADVERTENCIA!:linebreak:Este mod contiene shaders y efectos que pueden causar ataque epilépticos, mareos o cualquier discapacidad similar. :linebreak::linebreak:Asegúrese  de ir al menú de opciones (localizado en el menú principal y el menú de pausa) para acceder a las opciones. :linebreak::linebreak:El idioma está disponible en las mismas opciones.:linebreak::linebreak:(Toque na tela para continuar.)
  
 // TITLE STATE 
 title_pressEnter==Presiona Enter para Continuar 
+title_pressEnter_mobile==Toca la pantalla para Continuar
 
 // Main Menu State // 
 main_story==Modo historia 
@@ -30,6 +32,7 @@ freeplay_extra==Extra
 freeplay_score==Score
 freeplay_altInstrumental==Presiona Alt para reproducir el instrumental de la canción actual. 
 freeplay_skipChar==Mantén CTRL para saltar el selector de personaje 
+freeplay_skipChar_mobile==Mantén presionado el botón C para saltar el selector de personaje
  
 supernovae_hint==¿Te crees bien vergas con Dave and Bambi? Presiona 7 en cualquier momento y derrota mi challenge para ganar. 
 glitch_hint==¿Te crees bien vergas con Dave and Bambi? Presiona 7 en cualquier momento y derrota mi challenge para ganar. 

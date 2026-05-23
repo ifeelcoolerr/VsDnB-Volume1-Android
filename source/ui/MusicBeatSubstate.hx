@@ -9,6 +9,13 @@ import scripting.ScriptEventDispatchSubState;
 import scripting.events.ScriptEvent;
 import scripting.module.ModuleHandler;
 import util.SortUtil;
+#if mobileC
+import mobile.flixel.FlxVirtualPad;
+import flixel.FlxCamera;
+import graphics.GameCamera;
+import flixel.input.actions.FlxActionInput;
+import flixel.util.FlxDestroyUtil;
+#end
 
 /**
  * An `FlxSubState` linked to the Conductor to allow for bpm synced events such as step, beat, and measure hit events, and more.
@@ -47,6 +54,49 @@ class MusicBeatSubstate extends ScriptEventDispatchSubState
 	inline function get_controls():Controls
 		return PlayerSettings.controls;
 
+	#if mobileC
+	var virtualPad:FlxVirtualPad;
+	var trackedInputsVirtualPad:Array<FlxActionInput> = [];
+
+	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode):Void
+	{
+		if (virtualPad != null)
+			removeVirtualPad();
+
+		virtualPad = new FlxVirtualPad(DPad, Action);
+		add(virtualPad);
+
+		controls.setVirtualPadUI(virtualPad, DPad, Action);
+		trackedInputsVirtualPad = controls.trackedInputsUI;
+		controls.trackedInputsUI = [];
+	}
+
+	public function removeVirtualPad():Void
+	{
+		if (trackedInputsVirtualPad.length > 0)
+			controls.removeVirtualControlsInput(trackedInputsVirtualPad);
+
+		if (virtualPad != null)
+			remove(virtualPad);
+	}
+
+	public function addVirtualPadCamera():Void
+	{
+    	if (virtualPad != null)
+    	{
+        	var camVirtualPad:GameCamera = new GameCamera();
+        	camVirtualPad.bgColor = 0x00000000;
+
+        	FlxG.cameras.add(camVirtualPad, false);
+
+       		camVirtualPad.follow(null);
+        	camVirtualPad.scroll.set(0, 0);
+
+        	virtualPad.cameras = [camVirtualPad];
+    	}
+	}
+	#end
+
 
 	override function create()
 	{
@@ -75,7 +125,17 @@ class MusicBeatSubstate extends ScriptEventDispatchSubState
 	{
 		removeSignals();
 
+		#if mobileC
+		if (trackedInputsVirtualPad.length > 0)
+			controls.removeVirtualControlsInput(trackedInputsVirtualPad);
+		#end
+
 		super.destroy();
+
+		#if mobileC
+		if (virtualPad != null)
+			virtualPad = FlxDestroyUtil.destroy(virtualPad);
+		#end
 	}
 
 	/**

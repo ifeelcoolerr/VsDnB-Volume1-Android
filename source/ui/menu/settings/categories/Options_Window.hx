@@ -7,14 +7,14 @@ import ui.menu.settings.SettingsMenu.NumericStepperOption;
 
 class Options_Window extends SettingsCategory
 {
-	#if !mac
+	#if (!mac && !mobile)
 	var checkbox_darkMode:CheckboxOption;
 	#end
 	var stepper_fps:NumericStepperOption;
 
 	public override function init()
 	{
-		#if !mac
+		#if (!mac && !mobile)
 		checkbox_darkMode = new CheckboxOption(400, 600, {
 			name: LanguageManager.getTextString('settings_window_darkMode'),
 			description: LanguageManager.getTextString('settings_window_darkMode_description'),
@@ -44,6 +44,7 @@ class Options_Window extends SettingsCategory
 		list.push(stepper_fps);
 		add(stepper_fps);
 
+		#if !android
 		var checkbox_borderless = new CheckboxOption(400, 400, {
 			name: LanguageManager.getTextString('settings_window_borderless'),
 			description: LanguageManager.getTextString('settings_window_borderless_description'),
@@ -59,8 +60,9 @@ class Options_Window extends SettingsCategory
 		checkbox_borderless.setChecked(Preferences.borderless, false, true);
 		list.push(checkbox_borderless);
 		add(checkbox_borderless);
+		#end
 
-		var checkbox_vsync = new CheckboxOption(400, 500, {
+		var checkbox_vsync = new CheckboxOption(400, #if android 400 #else 500 #end, {
 			name: LanguageManager.getTextString('settings_window_VSync'),
 			description: LanguageManager.getTextString('settings_window_VSync_description'),
 			callback: function(value:Bool)
@@ -74,7 +76,7 @@ class Options_Window extends SettingsCategory
 		add(checkbox_vsync);
 
 		// Make sure this gets added last so it fits last in the group.
-		#if !mac
+		#if (!mac && !mobile)
 		list.push(checkbox_darkMode);
 		add(checkbox_darkMode);
 		#end

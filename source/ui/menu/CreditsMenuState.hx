@@ -99,6 +99,10 @@ class CreditsMenuState extends MusicBeatState
 
 		FlxG.cameras.reset(followCamera);
 		FlxG.cameras.setDefaultDrawTarget(followCamera, true);
+
+        #if mobileC
+        addVirtualPad(UP_DOWN, B);
+        #end   
         
         super.create();
     }
@@ -107,16 +111,16 @@ class CreditsMenuState extends MusicBeatState
     {
         super.update(elapsed);
 
-        if (FlxG.keys.pressed.UP)
+        if (FlxG.keys.pressed.UP #if mobileC || virtualPad.buttonUp.pressed #end)
         {
             followCamera.followPoint.y = FlxMath.bound(followCamera.followPoint.y - MOVE_SPEED * elapsed, MIN_Y, MAX_Y);
         }
-        if (FlxG.keys.pressed.DOWN)
+        if (FlxG.keys.pressed.DOWN #if mobileC || virtualPad.buttonDown.pressed #end)
         {
             followCamera.followPoint.y = FlxMath.bound(followCamera.followPoint.y + MOVE_SPEED * elapsed, MIN_Y, MAX_Y);
         }
 
-        if (controls.BACK)
+        if (controls.BACK #if mobileC || FlxG.android.justReleased.BACK #end)
         {
             FlxG.switchState(() -> new MainMenuState());
         }

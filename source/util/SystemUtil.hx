@@ -3,6 +3,9 @@ package util;
 // crazy system shit!!!!!
 // lordryan wrote this :) (erizur added cross platform env vars)
 import sys.io.File;
+#if android
+import util.AndroidUtil;
+#end
 
 class SystemUtil
 {
@@ -72,7 +75,11 @@ class SystemUtil
 		#if desktop
 		var path = SystemUtil.getTempPath() + "/" + fileName + ".txt";
 
+		#if desktop
 		File.saveContent(path, fileContent);
+		#else
+		SUtil.saveContent(path, fileContent);
+		#end
 		
         FileUtil.openFile(path);
 		#end

@@ -9,6 +9,9 @@ import openfl.utils.Assets;
 #if sys
 import sys.FileSystem;
 #end
+#if android
+import util.AndroidUtil;
+#end
 
 /**
  * A utility to help provide functions relating to the file explorer, and general file manipulation. 
@@ -51,8 +54,8 @@ class FileUtil
      */
     public static function createDirectory(path:String)
     {
-        if (!FileSystem.exists(path)) {
-            FileSystem.createDirectory(path);
+        if (!FileSystem.exists(AndroidUtil.getStorageDirectory() + path)) {
+            FileSystem.createDirectory(AndroidUtil.getStorageDirectory() + path);
         }
     }
 

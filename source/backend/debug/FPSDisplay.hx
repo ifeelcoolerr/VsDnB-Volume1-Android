@@ -69,9 +69,10 @@ class FPSDisplay extends TextField
 		currentTime += deltaTime;
 		times.push(currentTime);
 
-		while (times[0] < currentTime - 1000)
+		// maybe a fix??? idfk
+		while (times.length > 0 && times[0] < currentTime - 1000)
 		{
-			times.shift();
+    		times.shift();
 		}
 
 		var currentCount = times.length;

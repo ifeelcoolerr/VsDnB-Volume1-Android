@@ -160,6 +160,11 @@ abstract class PlayerSelect extends MusicBeatState
         buildMusic();
 
         updateSelection();
+
+        #if mobileC
+        addVirtualPad(LEFT_RIGHT, A_B);
+        addVirtualPadCamera();
+        #end
     }
 
     override function update(elapsed:Float)

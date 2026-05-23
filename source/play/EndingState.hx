@@ -9,6 +9,9 @@ import flixel.util.FlxColor;
 
 import ui.MusicBeatState;
 import ui.menu.story.StoryMenuState;
+#if mobileC
+import util.TouchUtil;
+#end
 
 typedef EndingStateParams =
 {
@@ -145,7 +148,7 @@ class EndingState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (controls.ACCEPT)
+		if (controls.ACCEPT #if mobileC || TouchUtil.justPressed #end)
 		{
 			endIt();
 		}

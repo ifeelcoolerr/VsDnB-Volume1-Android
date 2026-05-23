@@ -247,12 +247,16 @@ class Turntable extends FlxSpriteGroup
                     var currentTime:String = FlxStringUtil.formatTime(instrumentalTrack.time / 1000);
                     var currentLength:String = FlxStringUtil.formatTime(instrumentalTrack.length / 1000);
                     setTimeText(currentTime);
+                    #if desktop
                     DiscordClient.changePresence('In the OST Menu', 'Listening to ${currentPlayData.name} ($currentTime / $currentLength)');
+                    #end
                 case 'timeLeft':
                     var timeLeft:String = FlxStringUtil.formatTime((instrumentalTrack.length - instrumentalTrack.time) / 1000);
 
                     setTimeText(FlxStringUtil.formatTime((instrumentalTrack.length - instrumentalTrack.time) / 1000));
+                    #if desktop
                     DiscordClient.changePresence('In the OST Menu', 'Listening to ${currentPlayData.name} ($timeLeft)');
+                    #end
             }
         }
 
@@ -633,7 +637,9 @@ class Turntable extends FlxSpriteGroup
         spectrogram.visible = false;
         spectrogram.stop();
 
+        #if desktop
         DiscordClient.changePresence('In the OST Menu', null);
+        #end
     }
 
     /**

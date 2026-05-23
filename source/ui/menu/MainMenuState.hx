@@ -118,7 +118,9 @@ class MainMenuState extends MusicBeatState
 		}
 		persistentUpdate = persistentDraw = true;
 
+		#if desktop
 		DiscordClient.changePresence("In the Menus", null);
+		#end
 
 		bg = new FlxSprite(-80).loadGraphic(FileUtil.randomizeBG());
 		bg.scrollFactor.set();
@@ -210,6 +212,10 @@ class MainMenuState extends MusicBeatState
 			});
 		});
 
+		#if mobileC
+		addVirtualPad(LEFT_RIGHT, A_B);
+		#end
+
 		super.create();
 	}
 
@@ -240,7 +246,7 @@ class MainMenuState extends MusicBeatState
 			selectOption(curSelected);
 			canInteract = false;
 		}
-		if (back)
+		if (back #if android || FlxG.android.justReleased.BACK #end)
 		{
 			canInteract = false;
 			SoundController.play(Paths.sound('cancelMenu'));
@@ -379,6 +385,9 @@ class MainMenuState extends MusicBeatState
 						firstStart = true;
 						transitionItems();
 					}
+					#if mobileC
+					removeVirtualPad();
+					#end
 					openSubState(settings);
 				case 'credits':
 					FlxG.switchState(() -> new CreditsMenuState());

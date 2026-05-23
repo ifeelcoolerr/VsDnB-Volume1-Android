@@ -10,6 +10,9 @@ import flixel.util.FlxColor;
 import flixel.util.typeLimit.NextState;
 import flixel.system.FlxSplash;
 import openfl.Lib;
+#if android
+import util.TouchUtil;
+#end
 
 /**
  * The screen that shows when first loading the game.
@@ -46,7 +49,7 @@ class GameSplash extends FlxState
 
     override public function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.ANY)
+		if (FlxG.keys.justPressed.ANY #if android || TouchUtil.justPressed #end)
 		{
 			onComplete(null);
 		}

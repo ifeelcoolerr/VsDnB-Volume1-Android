@@ -231,14 +231,20 @@ class OSTMenuState extends MusicBeatState
         
         Cursor.show();
         
+        #if desktop
         DiscordClient.changePresence('In the OST Menu', null);
+        #end
+
+        #if mobileC
+        addVirtualPad(LEFT_FULL, A_B);
+        #end
     }
 
     override function update(elapsed:Float)
     {
         super.update(elapsed);
 
-        if (controls.BACK)
+        if (controls.BACK #if mobileC || FlxG.android.justReleased.BACK #end)
         { 
             FlxG.autoPause = true;
             FlxG.switchState(() -> new MainMenuState());
@@ -252,22 +258,22 @@ class OSTMenuState extends MusicBeatState
             switch (currentSelectType)
             {
                 case CATEGORY:
-                    if (FlxG.keys.justPressed.UP || FlxG.mouse.wheel > 0)
+                    if (FlxG.keys.justPressed.UP #if mobileC || virtualPad.buttonUp.justPressed #end || FlxG.mouse.wheel > 0)
                     {
                         toggleCategorySelect(false);
                         changeSongSelection(categorySongsCount - currentSongSelected);
                     }
-                    if (FlxG.keys.justPressed.DOWN || FlxG.mouse.wheel < 0)
+                    if (FlxG.keys.justPressed.DOWN #if mobileC || virtualPad.buttonDown.justPressed #end || FlxG.mouse.wheel < 0)
                     {
                         toggleCategorySelect(false);
                         changeSongSelection(0 - currentSongSelected);
                     }
 
-                    if (FlxG.keys.pressed.LEFT || FlxG.mouse.wheel < 0)
+                    if (FlxG.keys.pressed.LEFT #if mobileC || virtualPad.buttonLeft.pressed #end || FlxG.mouse.wheel < 0)
                     {
                         arrowLeft.scale.set(0.8, 0.8);
 
-                        if (FlxG.keys.justPressed.LEFT)
+                        if (FlxG.keys.justPressed.LEFT #if mobileC || virtualPad.buttonLeft.justPressed #end)
                             changeCategorySelection(-1);
                     }
                     else
@@ -275,11 +281,11 @@ class OSTMenuState extends MusicBeatState
                         arrowLeft.scale.set(1, 1);
                     }
                     
-                    if (FlxG.keys.pressed.RIGHT)
+                    if (FlxG.keys.pressed.RIGHT #if mobileC || virtualPad.buttonRight.pressed #end)
                     {
                         arrowRight.scale.set(0.8, 0.8);
 
-                        if (FlxG.keys.justPressed.RIGHT)
+                        if (FlxG.keys.justPressed.RIGHT #if mobileC || virtualPad.buttonRight.justPressed #end)
                             changeCategorySelection(1);
                     }
                     else
@@ -287,7 +293,7 @@ class OSTMenuState extends MusicBeatState
                         arrowRight.scale.set(1, 1);
                     }
                 case SONG:
-                    if (FlxG.keys.justPressed.UP || FlxG.mouse.wheel > 0)
+                    if (FlxG.keys.justPressed.UP #if mobileC || virtualPad.buttonUp.justPressed #end)
                     {
                         if (currentSongSelected == 0)
                         {
@@ -298,7 +304,7 @@ class OSTMenuState extends MusicBeatState
                             changeSongSelection(-1);
                         }
                     }
-                    if (FlxG.keys.justPressed.DOWN || FlxG.mouse.wheel < 0)
+                    if (FlxG.keys.justPressed.DOWN #if mobileC || virtualPad.buttonDown.justPressed #end)
                     {
                         if (currentSongSelected == categorySongsCount)
                         {
@@ -312,12 +318,12 @@ class OSTMenuState extends MusicBeatState
 
                     if (hasMultipleVariations)
                     {
-						if (FlxG.keys.pressed.LEFT)
+						if (FlxG.keys.pressed.LEFT #if mobileC || virtualPad.buttonLeft.pressed #end)
 						{
                             arrowLeftVariation.color = FlxColor.LIME;
 							arrowLeftVariation.scale.set(0.8, 0.8);
 
-							if (FlxG.keys.justPressed.LEFT)
+							if (FlxG.keys.justPressed.LEFT #if mobileC || virtualPad.buttonLeft.justPressed #end)
 								changeVariationSelection(-1);
 						}
 						else
@@ -326,12 +332,12 @@ class OSTMenuState extends MusicBeatState
 							arrowLeftVariation.scale.set(1, 1);
 						}
 
-						if (FlxG.keys.pressed.RIGHT)
+						if (FlxG.keys.pressed.RIGHT #if mobileC || virtualPad.buttonRight.pressed #end)
 						{
                             arrowRightVariation.color = FlxColor.LIME;
 							arrowRightVariation.scale.set(0.8, 0.8);
 
-							if (FlxG.keys.justPressed.RIGHT)
+							if (FlxG.keys.justPressed.RIGHT #if mobileC || virtualPad.buttonRight.justPressed #end)
 								changeVariationSelection(1);
 						}
 						else
@@ -341,7 +347,7 @@ class OSTMenuState extends MusicBeatState
 						}
                     }
 
-                    if (FlxG.keys.justPressed.ENTER && selectedSongOption.getVariation(selectedVariation) != turnTable.currentPlayData)
+                    if (FlxG.keys.justPressed.ENTER #if mobileC || virtualPad.buttonA.justPressed #end && selectedSongOption.getVariation(selectedVariation) != turnTable.currentPlayData)
                     {
                         loadSong(selectedSongOption.getVariation(selectedVariation));
                     }

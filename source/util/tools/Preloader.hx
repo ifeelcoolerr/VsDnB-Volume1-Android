@@ -23,6 +23,9 @@ import cpp.vm.Gc;
 #if sys
 import sys.FileSystem;
 #end
+#if android
+import util.AndroidUtil;
+#end
 
 /**
  * Utility for providing, and management cache for assets.
@@ -140,14 +143,14 @@ class Preloader
 	 */
 	static function readDirectory(keyToCheck:String, absolutePath:String, library:String):Bool
 	{
-		var directoryFiles:Array<String> = FileSystem.readDirectory(absolutePath);
+		var directoryFiles:Array<String> = FileSystem.readDirectory(AndroidUtil.getStorageDirectory() + absolutePath);
 		for (file in directoryFiles)
 		{
 			var fullPath:String = absolutePath + '/' + file;
 			var fullLibraryPath:String = '$library:$fullPath';
 
 			// Use the non-library asset path to check if the current iterated item is a directory.
-			if (FileSystem.isDirectory(fullPath))
+			if (FileSystem.isDirectory(AndroidUtil.getStorageDirectory() + fullPath))
 			{
 				var value:Bool = readDirectory(keyToCheck, fullPath, library);
 				if (!value)
@@ -190,7 +193,7 @@ class Preloader
 			var library:String = Paths.stripLibrary(assetPath);
 			var path:String = Paths.absolutePath(assetPath);
 
-			if (FileSystem.isDirectory(path))
+			if (FileSystem.isDirectory(AndroidUtil.getStorageDirectory() + path))
 			{
 				// The requested path is a directory.
 				// We need to recursively check each of the file (and directories if needed)

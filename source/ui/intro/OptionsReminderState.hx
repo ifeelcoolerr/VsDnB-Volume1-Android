@@ -4,10 +4,18 @@ import data.language.LanguageManager;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
+#if android
+import util.TouchUtil;
+#end
 
 class OptionsReminderState extends MusicBeatState
 {
-    var textString:String = LanguageManager.getTextString('intro_warning');
+    var textString:String =
+    #if desktop
+        LanguageManager.getTextString('intro_warning');
+    #else
+        LanguageManager.getTextString('intro_warning_mobile');
+    #end
 
     public override function create()
     {
@@ -21,7 +29,7 @@ class OptionsReminderState extends MusicBeatState
 
     override function update(elapsed:Float)
     {
-        if (FlxG.keys.justPressed.ENTER)
+        if (FlxG.keys.justPressed.ENTER #if mobile || TouchUtil.justPressed #end)
         {
             FlxG.save.data.hasSeenOptionsReminder = true;
             FlxG.save.flush();

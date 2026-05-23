@@ -3,9 +3,11 @@ es-US==Spanish
 pt-br==Brazilian-Portuguese
 
 intro_warning==WARNING!:linebreak:This mod contains shaders and effects that could trigger seizures, shaking or any similar issues.:linebreak::linebreak:Make sure to head to the options menu (located on the main menu and pause menu) for accessibility options. :linebreak::linebreak:Language options are also available.:linebreak::linebreak:(Press ENTER to continue.)
+intro_warning_mobile==WARNING!:linebreak:This mod contains shaders and effects that could trigger seizures, shaking or any similar issues.:linebreak::linebreak:Make sure to head to the options menu (located on the main menu and pause menu) for accessibility options. :linebreak::linebreak:Language options are also available.:linebreak::linebreak:(Tap the screen to continue.)
 
 // TITLE STATE
 title_pressEnter==Press Enter To Play
+title_pressEnter_mobile==Tap the screen To Play
 
 // Main Menu State //
 main_story==Story Mode
@@ -36,6 +38,7 @@ rapTwo_hint==I am Dave and I have a mod.
 freeplay_score==Score
 freeplay_altInstrumental==Press Alt To Play The Current Song's Instrumental
 freeplay_skipChar==Hold CTRL To Skip Character Select
+freeplay_skipChar_mobile==Hold the C Button To Skip Character Select
 
 // Pause State //
 pause_Resume==Resume

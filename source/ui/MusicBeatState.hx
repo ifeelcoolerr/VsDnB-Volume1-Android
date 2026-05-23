@@ -9,6 +9,13 @@ import scripting.ScriptEventDispatchState;
 import scripting.events.ScriptEvent;
 import scripting.module.ModuleHandler;
 import util.SortUtil;
+#if mobileC
+import mobile.MobileControls;
+import mobile.flixel.FlxVirtualPad;
+import graphics.GameCamera;
+import flixel.input.actions.FlxActionInput;
+import flixel.util.FlxDestroyUtil;
+#end
 
 /**
  * An `FlxState` linked to the Conductor to allow for bpm synced events such as step, beat, and measure hit events, and more.
@@ -47,6 +54,110 @@ class MusicBeatState extends ScriptEventDispatchState
 	inline function get_controls():Controls
 		return PlayerSettings.controls;
 
+	#if mobileC
+	var mobileControls:MobileControls;
+	var virtualPad:FlxVirtualPad;
+	var trackedInputsMobileControls:Array<FlxActionInput> = [];
+	var trackedInputsVirtualPad:Array<FlxActionInput> = [];
+
+	/**
+	 * Adds a Virtual Pad.
+	 */
+	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode):Void
+	{
+		if (virtualPad != null)
+			removeVirtualPad();
+
+		virtualPad = new FlxVirtualPad(DPad, Action);
+		add(virtualPad);
+
+		controls.setVirtualPadUI(virtualPad, DPad, Action);
+		trackedInputsVirtualPad = controls.trackedInputsUI;
+		controls.trackedInputsUI = [];
+	}
+
+	/**
+	 * Removes a Virtual Pad.
+	 */
+	public function removeVirtualPad():Void
+	{
+		if (trackedInputsVirtualPad.length > 0)
+			controls.removeVirtualControlsInput(trackedInputsVirtualPad);
+
+		if (virtualPad != null)
+			remove(virtualPad);
+	}
+
+	/**
+	 * Adds Mobile Controls.
+	 */
+	public function addMobileControls():Void
+	{
+		if (mobileControls != null)
+			removeMobileControls();
+
+		mobileControls = new MobileControls();
+
+		switch (MobileControls.mode)
+		{
+			case 'Pad-Right' | 'Pad-Left' | 'Pad-Custom':
+				controls.setVirtualPadNOTES(mobileControls.virtualPad, RIGHT_FULL, NONE);
+			case 'Pad-Duo':
+				controls.setVirtualPadNOTES(mobileControls.virtualPad, BOTH_FULL, NONE);
+			case 'Hitbox':
+				controls.setHitBox(mobileControls.hitbox);
+			case 'Keyboard':
+		}
+
+		trackedInputsMobileControls = controls.trackedInputsNOTES;
+		controls.trackedInputsNOTES = [];
+
+		var camControls:GameCamera = new GameCamera();
+        camControls.bgColor = 0x00000000;
+
+        FlxG.cameras.add(camControls, false);
+
+       	camControls.follow(null);
+        camControls.scroll.set(0, 0);
+
+		mobileControls.cameras = [camControls];
+		mobileControls.visible = false;
+		add(mobileControls);
+	}
+
+	/**
+	 * Removes Mobile Controls.
+	 */
+	public function removeMobileControls():Void
+	{
+		if (trackedInputsMobileControls.length > 0)
+			controls.removeVirtualControlsInput(trackedInputsMobileControls);
+
+		if (mobileControls != null)
+			remove(mobileControls);
+	}
+
+	/**
+	 * Adds a Camera to the Virtual Pad.
+	 * Useful if the state/substate uses a camera.
+	 */
+	public function addVirtualPadCamera():Void
+	{
+    	if (virtualPad != null)
+    	{
+        	var camVirtualPad:GameCamera = new GameCamera();
+        	camVirtualPad.bgColor = 0x00000000;
+
+        	FlxG.cameras.add(camVirtualPad, false);
+
+       		camVirtualPad.follow(null);
+        	camVirtualPad.scroll.set(0, 0);
+
+        	virtualPad.cameras = [camVirtualPad];
+    	}
+	}
+	#end
+
 
 	override function create()
 	{
@@ -66,7 +177,23 @@ class MusicBeatState extends ScriptEventDispatchState
 	{
 		removeSignals();
 
+		#if mobileC
+		if (trackedInputsMobileControls.length > 0)
+			controls.removeVirtualControlsInput(trackedInputsMobileControls);
+
+		if (trackedInputsVirtualPad.length > 0)
+			controls.removeVirtualControlsInput(trackedInputsVirtualPad);
+		#end
+
 		super.destroy();
+
+		#if mobileC
+		if (virtualPad != null)
+			virtualPad = FlxDestroyUtil.destroy(virtualPad);
+
+		if (mobileControls != null)
+			mobileControls = FlxDestroyUtil.destroy(mobileControls);
+		#end
 	}
 
 	/**

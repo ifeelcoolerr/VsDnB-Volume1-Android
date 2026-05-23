@@ -33,6 +33,10 @@ import ui.menu.MainMenuState;
 import api.Discord.DiscordClient;
 #end
 
+#if mobileC
+import util.TouchUtil;
+#end
+
 using StringTools;
 
 class TitleState extends MusicBeatState
@@ -101,7 +105,7 @@ class TitleState extends MusicBeatState
 		version.angle = -3;
 		add(version);
 
-		pressEnter = new FlxText(0, 600, 0, LanguageManager.getTextString('title_pressEnter'), 20);
+		pressEnter = new FlxText(0, 600, 0, #if desktop LanguageManager.getTextString('title_pressEnter') #else LanguageManager.getTextString('title_pressEnter_mobile') #end, 20);
 		pressEnter.setFormat(Paths.font('comic.ttf'), 48, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		pressEnter.screenCenter(X);
 		pressEnter.borderSize = 3;
@@ -143,6 +147,11 @@ class TitleState extends MusicBeatState
 				pressedEnter = true;
 			#end
 		}
+
+		#if mobile
+		if (TouchUtil.justPressed)
+			pressedEnter = true;
+		#end
 
 		if (pressEnter != null && pressedEnter && !transitioning)
 		{

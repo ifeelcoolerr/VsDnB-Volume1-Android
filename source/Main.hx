@@ -17,6 +17,10 @@ import ui.intro.InitState;
 import api.ALSoftConfig; // Longest yeah boi ever
 #end
 
+#if android
+import util.AndroidUtil;
+#end
+
 class Main extends Sprite
 {
 	public static var VERSION:String = '1.0.9';
@@ -43,6 +47,7 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+		AndroidUtil.uncaughtErrorHandler();
 		stage != null ? init() : addEventListener(Event.ADDED_TO_STAGE, init);
 	}
 
@@ -70,6 +75,12 @@ class Main extends Sprite
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
+		#if mobile
+		gameWidth = 1280;
+		gameHeight = 720;
+		zoom = 1;
+		#end
+
 		if (zoom == -1)
 		{
 			var ratioX:Float = stageWidth / gameWidth;
@@ -86,7 +97,15 @@ class Main extends Sprite
 		@:privateAccess
 		untyped FlxG.cameras = new GameCameraFrontEnd();
 
+		#if android
+		AndroidUtil.checkFiles();
+		#end
+
 		addChild(game);
 		addChild(fps);
+
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
+		#end
 	}
 }

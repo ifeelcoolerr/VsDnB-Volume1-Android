@@ -321,6 +321,10 @@ class FreeplayState extends MusicBeatState
 		add(grpSongs);
 		add(grpIcons);
 
+		#if mobileC
+		addVirtualPad(LEFT_FULL, A_B_C);
+		#end
+
 		super.create();
 	}
 	
@@ -339,7 +343,7 @@ class FreeplayState extends MusicBeatState
 			if (canInteract && (controls.RIGHT_P || FlxG.mouse.wheel > 0))
 				UpdatePackSelection(1);
 
-			if (controls.BACK && canInteract)
+			if (controls.BACK #if mobileC || FlxG.android.justReleased.BACK #end && canInteract)
 			{
 				FlxG.switchState(() -> new MainMenuState());
 			}
@@ -510,7 +514,7 @@ class FreeplayState extends MusicBeatState
 						PlayStatePlaylist.isStoryMode = false;
 						PlayStatePlaylist.storyWeek = songs[curSelected].week;
 
-						if (FlxG.keys.pressed.CONTROL || skipSelect.contains(song.id.toLowerCase()))
+						if (FlxG.keys.pressed.CONTROL #if mobileC || virtualPad.buttonC.pressed #end || skipSelect.contains(song.id.toLowerCase()))
 						{
 							CharacterSelect.selectedCharacter = null;
 							LoadingState.loadAndSwitchState(() -> new PlayState({
@@ -659,7 +663,7 @@ class FreeplayState extends MusicBeatState
 
 		if (showCharText)
 		{
-			characterSelectText = new FlxText(FlxG.width, FlxG.height, 0, LanguageManager.getTextString("freeplay_skipChar"), 18);
+			characterSelectText = new FlxText(FlxG.width, FlxG.height, 0, #if desktop LanguageManager.getTextString("freeplay_skipChar") #else LanguageManager.getTextString("freeplay_skipChar_mobile") #end, 18);
 			characterSelectText.setFormat("Comic Sans MS Bold", 18, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			characterSelectText.borderSize = 1.5;
 			characterSelectText.antialiasing = true;

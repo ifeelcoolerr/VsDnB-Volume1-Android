@@ -3,9 +3,11 @@ es-US==Espanhol
 pt-br==Português Brasileiro
 
 intro_warning==AVISO!:linebreak:Esse mod contém shaders e outros efeitos que podem causar convulsões, tremores ou problemas similares..:linebreak::linebreak:Faça certeza de ir para o menu de opções(localizado no menu principal e menu de pausa) para opções de acessibilidade.:linebreak::linebreak:Opções de linguagem também estão disponíveis.:linebreak::linebreak:(Pressione ENTER para continuar.)
+intro_warning==AVISO!:linebreak:Esse mod contém shaders e outros efeitos que podem causar convulsões, tremores ou problemas similares..:linebreak::linebreak:Faça certeza de ir para o menu de opções(localizado no menu principal e menu de pausa) para opções de acessibilidade.:linebreak::linebreak:Opções de linguagem também estão disponíveis.:linebreak::linebreak:(Toque na tela para continuar.)
 
 // TITLE STATE
 title_pressEnter==Pressione Enter para Jogar
+title_pressEnter_mobile==Toque na tela para Jogar
 
 // Main Menu State //
 main_story==Modo História
@@ -29,6 +31,7 @@ freeplay_extra==Extra
 freeplay_score==Score
 freeplay_altInstrumental==Pressione Alt Para Ouvir O Instrumental Da Música Atual
 freeplay_skipChar==Segure CTRL Para Pular A Seleção De Personagens
+freeplay_skipChar_mobile==Segure pressionada a botão C Para Pular A Seleção De Personagens
 
 supernovae_hint==Você é um pro no Dave e Bambi? Aperte 7 em algum lugar e vença meu desafio para ganhar.
 glitch_hint==Você é um pro no Dave e Bambi? Aperte 7 em algum lugar e vença meu desafio para ganhar.

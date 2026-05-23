@@ -111,6 +111,16 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.camera.follow(camFollow, LOCKON, 0.01);
 	}
 
+	override function create():Void
+	{
+		super.create();
+
+		#if mobileC
+		addVirtualPad(NONE, A_B);
+		addVirtualPadCamera();
+        #end
+	}
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);

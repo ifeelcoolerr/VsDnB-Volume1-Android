@@ -299,6 +299,11 @@ class CharacterSelect extends MusicBeatState
 		updatePageDisplay();
 		updateSelection();
 
+		#if mobileC
+		addVirtualPad(LEFT_FULL, A_B);
+		addVirtualPadCamera();
+		#end
+
 		super.create();
 	}
 
@@ -340,10 +345,21 @@ class CharacterSelect extends MusicBeatState
 				}
 			}
 
+			#if mobileC
+			if (virtualPad.buttonLeft.justPressed)
+				changeRowSelection(-1);
+			if (virtualPad.buttonDown.justPressed)
+				changeColumnSelection(1);
+			if (virtualPad.buttonUp.justPressed)
+				changeColumnSelection(-1);
+			if (virtualPad.buttonRight.justPressed)
+				changeRowSelection(1);
+			#end
+
 			if (controls.ACCEPT)
 				selectCharacter();
 
-			if (controls.BACK)
+			if (controls.BACK #if android || FlxG.android.justReleased.BACK #end)
 			{
 				SoundController.playMusic(Paths.music('freakyMenu'));
 				FlxG.switchState(() -> new FreeplayState());

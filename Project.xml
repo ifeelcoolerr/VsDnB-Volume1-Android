@@ -22,8 +22,8 @@
 	<window if="desktop" hardware="true" allow-shaders="true" require-shaders="true" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
 
 
-	<!--Mobile-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
+	<!--Mobile-specific-->
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<classpath name="source" />
@@ -44,6 +44,8 @@
 	<set name="BUILD_DIR" value="export/release" unless="debug" />
 	<set name="BUILD_DIR" value="export/32bit" if="32bit" />
 
+	<define name="mobileC" if="mobile" />
+
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web"/>
 	<assets path="assets/preload/videos" rename="assets/videos" include="*.mp4" embed='false' />
@@ -54,6 +56,7 @@
 	<assets path='art/readme.txt' rename='PLEASE READ.txt' />
 	<assets path='art/icons' rename='icons' embed='true'/>
 	<assets path="assets/fonts" embed='true'/>
+	<assets path="mobile" rename="assets/mobile" if="mobileC" />
 
 	<define name="SHADERS_ENABLED"/>
 	<define name="PRELOAD_ALL" unless="web" />
@@ -91,6 +94,7 @@
 	<haxelib name="flixel-animate"/>
 	<haxelib name="grig.audio" />
 	<haxelib name="funkin.vis" />
+	<haxelib name="extension-androidtools" if="android" />
 
 	<section if="FEATURE_TRACY">
 		<haxedef name="HXCPP_TELEMETRY" />
@@ -109,6 +113,7 @@
 	
 	<haxedef name="HXCPP_STACK_LINE"/>
 	<haxedef name="HXCPP_STACK_TRACE"/>
+	<haxedef name="HXCPP_CHECK_POINTER" />
 	<haxedef name="hscriptPos" />
 
 	<!-- Configure Polymod -->
@@ -154,6 +159,20 @@
 	<haxeflag name="--macro" value="include('flixel.addons.effects')" />
 	<haxeflag name="--macro" value="include('flixel.addons.text')" />
 	<haxeflag name="--macro" value="include('flixel.addons.transition')" />
+
+	<section if="android">
+    	<config>
+        	<android gradle-version="7.4.2" gradle-plugin="7.3.1"/>
+        	<android platform="android-35"/>
+        	<android min-sdk-version="16" target-sdk-version="30" max-sdk-version="33"/>
+        	<android bundle="false"/>
+    	</config>
+
+		<android>
+        	<abi>arm64-v8a</abi>
+    	</android>
+	</section>
+
 
 	<!-- _________________________________ Custom _______________________________ -->
 
